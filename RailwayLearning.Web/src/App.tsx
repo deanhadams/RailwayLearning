@@ -1,20 +1,15 @@
 import { useState } from "react";
 import "./App.css";
+import { getHello } from "./services/api";
 
 function App() {
-    const [message, setMessage] = useState("Click the button to test the API.");
+    const [message, setMessage] = useState(
+        "Click the button to test the API."
+    );
 
     const testApi = async () => {
         try {
-            const response = await fetch(
-                "https://localhost:7021/api/hello"
-            );
-
-            if (!response.ok) {
-                throw new Error("API request failed.");
-            }
-
-            const data = await response.json();
+            const data = await getHello();
 
             setMessage(data.message);
         } catch (error) {
