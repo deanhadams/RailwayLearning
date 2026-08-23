@@ -1,23 +1,25 @@
-FROM node:22-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-WORKDIR /app
+WORKDIR /src
 
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
+COPY ["RailwayLearning.Api.csproj", "./"]
 
-COPY package*.json ./
-
-RUN npm ci
+RUN dotnet restore "RailwayLearning.Api.csproj"
 
 COPY . .
 
-RUN npm run build
+RUN dotnet publish "RailwayLearning.Api.csproj" \
+    -c Release \
+    -o /app/publish \
+    --no-restore
 
 
-FROM nginx:alpine
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-EXPOSE 80
+COPY --from=build /app/publish .
 
-CMD ["nginx", "-g", "daemon off;"]
+ENV ASPNETCORE_URLS=http://+:8080
+
+ENTRYPOINT ["dotnet", "RailwayLearning.Api.dll"]
