@@ -17,8 +17,10 @@ dist/
 # Environment files
 .env
 .env.local
-.env.*.local
+.env.development
+.env.production
 
 # OS
 .DS_Store
 Thumbs.db
+/RailwayLearning.Web/.env.development
