@@ -9,12 +9,14 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ReactApp", policy =>
     {
         policy
-            .WithOrigins("http://localhost:5173")
+            .WithOrigins(
+                "http://localhost:5173",
+                "https://zealous-harmony-production-59b5.up.railway.app"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
